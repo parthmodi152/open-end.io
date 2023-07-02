@@ -1,0 +1,90 @@
+{
+  "name": "openend-io",
+  "description": "openend-io backend",
+  "version": "0.0.0",
+  "homepage": "",
+  "private": true,
+  "keywords": [
+    "feathers"
+  ],
+  "author": {},
+  "contributors": [],
+  "bugs": {},
+  "engines": {
+    "node": ">= 17.9.1"
+  },
+  "feathers": {
+    "language": "ts",
+    "packager": "npm",
+    "database": "postgresql",
+    "framework": "koa",
+    "transports": [
+      "rest",
+      "websockets"
+    ],
+    "schema": "typebox"
+  },
+  "directories": {
+    "lib": "src",
+    "test": "test"
+  },
+  "files": [
+    "lib/client.js",
+    "lib/**/*.d.ts",
+    "lib/**/*.shared.js"
+  ],
+  "main": "lib/client",
+  "scripts": {
+    "dev": "nodemon -x ts-node src/index.ts",
+    "compile": "shx rm -rf lib/ && tsc",
+    "start": "node lib/",
+    "prettier": "npx prettier \"**/*.ts\" --write",
+    "mocha": "cross-env NODE_ENV=test mocha test/ --require ts-node/register --recursive --extension .ts --exit",
+    "test": "cross-env NODE_ENV=test npm run migrate && npm run mocha",
+    "bundle:client": "npm run compile && npm pack --pack-destination ./public",
+    "migrate": "knex migrate:latest",
+    "migrate:make": "knex migrate:make",
+    "lint": "eslint --ext .ts src/ test/ --fix"
+  },
+  "dependencies": {
+    "@feathersjs/adapter-commons": "^5.0.5",
+    "@feathersjs/authentication": "^5.0.5",
+    "@feathersjs/authentication-client": "^5.0.5",
+    "@feathersjs/authentication-local": "^5.0.5",
+    "@feathersjs/authentication-oauth": "^5.0.5",
+    "@feathersjs/configuration": "^5.0.5",
+    "@feathersjs/errors": "^5.0.5",
+    "@feathersjs/feathers": "^5.0.5",
+    "@feathersjs/knex": "^5.0.5",
+    "@feathersjs/koa": "^5.0.5",
+    "@feathersjs/schema": "^5.0.5",
+    "@feathersjs/socketio": "^5.0.5",
+    "@feathersjs/transport-commons": "^5.0.5",
+    "@feathersjs/typebox": "^5.0.5",
+    "@koa/router": "^12.0.0",
+    "feathers-swagger": "^3.0.0",
+    "knex": "^2.4.2",
+    "koa-mount": "^4.0.0",
+    "koa-static": "^5.0.0",
+    "pg": "^8.11.0",
+    "swagger-ui-dist": "^4.19.0",
+    "winston": "^3.9.0"
+  },
+  "devDependencies": {
+    "@feathersjs/cli": "^5.0.5",
+    "@feathersjs/rest-client": "^5.0.5",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "^18.16.16",
+    "@typescript-eslint/eslint-plugin": "^5.59.11",
+    "@typescript-eslint/parser": "^5.59.11",
+    "axios": "^1.4.0",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.42.0",
+    "mocha": "^10.2.0",
+    "nodemon": "^2.0.22",
+    "prettier": "^2.8.8",
+    "shx": "^0.3.4",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.3"
+  }
+}
