@@ -1,5 +1,6 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/application.html
 import { feathers } from '@feathersjs/feathers';
+import s3Client from './s3';
 import configuration from '@feathersjs/configuration';
 import {
   bodyParser,
@@ -82,6 +83,7 @@ app.configure(
 app.configure(channels);
 app.configure(postgresql);
 app.configure(authentication);
+app.configure(s3Client);
 app.configure(services);
 
 // Register hooks that run on all service methods

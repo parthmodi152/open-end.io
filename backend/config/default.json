@@ -34,5 +34,12 @@
       "usernameField": "email",
       "passwordField": "password"
     }
+  },
+  "aws": {
+    "region": "your-aws-region",
+    "bucket": "your-s3-bucket-name",
+    "cloudFrontUrl": "your-cloudfront-url",
+    "keypairId": "your-cloudfront-keypair-id",
+    "enableSignedUrls": true
   }
 }
