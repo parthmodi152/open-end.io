@@ -5,7 +5,7 @@ import type { Payment, PaymentData, PaymentPatch, PaymentQuery, PaymentService }
 
 export type { Payment, PaymentData, PaymentPatch, PaymentQuery };
 
-export type PaymentClientService = Pick<PaymentService<Params<PaymentQuery>>, (typeof paymentMethods)[number]>
+export type PaymentClientService = Pick<PaymentService, (typeof paymentMethods)[number]>
 
 export const paymentPath = 'payment';
 
