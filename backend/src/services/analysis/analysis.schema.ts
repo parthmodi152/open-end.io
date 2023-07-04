@@ -9,7 +9,6 @@ import { dataValidator, queryValidator } from '../../validators'
 // Main data model schema
 export const analysisSchema = Type.Object(
   {
-    id: Type.Number(),
     orderId: Type.String({ format: 'uuid' }),
     projectId: Type.String({ format: 'uuid' }),
     creditsUsed: Type.Number(),

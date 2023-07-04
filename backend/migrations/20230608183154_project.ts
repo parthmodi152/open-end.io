@@ -12,10 +12,25 @@ export async function up(knex: Knex): Promise<void> {
     table.string('description').nullable();
     table.jsonb('config').nullable().defaultTo('{}');
     table.boolean('isArchive').defaultTo(false);
-    table.uuid('ownerUuid').references('uuid').inTable('users');
+    table
+      .uuid('companyUuid')
+      .references('uuid')
+      .inTable('companies')
+      .notNullable();
+    table
+      .uuid('createdBy')
+      .references('uuid')
+      .inTable('users')
+      .notNullable();
+    table.string('dataFileUrl').nullable();
+    table.string('resultFileUrl').nullable();
+    table.timestamp('createdAt').defaultTo(knex.fn.now());
   });
 }
 
 export async function down(knex: Knex): Promise<void> {
+  await knex.schema.alterTable('analysis', (table) => {
+    table.dropColumn('projectId');
+  });
   await knex.schema.dropTable('project');
 }

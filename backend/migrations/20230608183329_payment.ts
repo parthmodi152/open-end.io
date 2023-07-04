@@ -8,7 +8,6 @@ export async function up(knex: Knex): Promise<void> {
       .primary()
       .notNullable()
       .defaultTo(knex.raw('uuid_generate_v4()'));
-    table.string('description').notNullable();
     table.enu('type', ['INCOME', 'EXPENSE']).notNullable();
     table
       .uuid('companyUuid')

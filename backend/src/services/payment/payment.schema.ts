@@ -10,7 +10,6 @@ import { dataValidator, queryValidator } from '../../validators';
 export const paymentSchema = Type.Object(
   {
     uuid: Type.String({ format: 'uuid' }),
-    description: Type.String(),
     type: Type.Optional(Type.String()),
     companyUuid: Type.String({format: 'uuid'}),
     userUuid: Type.String({format: 'uuid'}),
@@ -27,7 +26,7 @@ export const paymentExternalResolver = resolve<Payment, HookContext>({});
 
 // Schema for creating new entries
 export const paymentDataSchema = Type.Pick(paymentSchema, 
-  ['description', 'type', 'companyUuid', 'userUuid', 'amount', 'balance'],
+  ['type', 'companyUuid', 'userUuid', 'amount', 'balance'],
   {
     $id: 'PaymentData'
   });

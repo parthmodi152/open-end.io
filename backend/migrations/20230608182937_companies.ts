@@ -20,6 +20,9 @@ export async function down(knex: Knex): Promise<void> {
   await knex.schema.alterTable('users', (table) => {
     table.dropColumn('companyUuid');
   });
+  await knex.schema.alterTable('project', (table) => {
+    table.dropColumn('companyUuid');
+  });
   await knex.schema.alterTable('payment', (table) => {
     table.dropColumn('companyUuid');
   });

@@ -17,8 +17,7 @@ export const projectSchema = Type.Object(
     createdBy: Type.String({ format: 'uuid' }),
     dataFileUrl: Type.Optional(Type.String()),
     resultFileUrl: Type.Optional(Type.String()),
-    createdAt: Type.String({ format: 'date-time' }),
-    updatedAt: Type.String({ format: 'date-time' }),
+    createdAt: Type.String({ format: 'date-time' })
   },
   { $id: 'Project', additionalProperties: false }
 );
