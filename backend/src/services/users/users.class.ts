@@ -29,7 +29,7 @@ export class UserService<
         .first();
       if (company) {
         await this.Model<Companies>('companies').where({ uuid: company.uuid }).update({
-          credit: parseInt(company.credit.toString()),
+          credits: parseInt(company.credits.toString()),
         });
       }
     }

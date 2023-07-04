@@ -16,7 +16,18 @@ export class CompaniesService<ServiceParams extends Params = CompaniesParams> ex
   CompaniesData,
   CompaniesParams,
   CompaniesPatch
-> {}
+> {
+  async hasSufficientCredits(companyId: string, requiredCredits: number): Promise<boolean> {
+    const company = await this.get(companyId);
+    return company.credits >= requiredCredits;
+  }
+
+  async deductCredits(companyId: string, credits: number): Promise<void> {
+    const company = await this.get(companyId);
+    company.credits -= credits;
+    await this.update(companyId, company);
+  }
+}
 
 export const getOptions = (app: Application): KnexAdapterOptions => {
   return {

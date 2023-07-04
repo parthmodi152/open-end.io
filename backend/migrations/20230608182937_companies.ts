@@ -9,7 +9,7 @@ export async function up(knex: Knex): Promise<void> {
       .notNullable()
       .defaultTo(knex.raw('uuid_generate_v4()'));
     table.string('name').notNullable().checkLength('>', 0).unique();
-    table.decimal('credit', 10, 2).nullable().defaultTo(0);
+    table.decimal('credits', 10, 2).nullable().defaultTo(0);
   });
   await knex.schema.alterTable('users', (table) => {
     table.uuid('companyUuid').references('uuid').inTable('companies');

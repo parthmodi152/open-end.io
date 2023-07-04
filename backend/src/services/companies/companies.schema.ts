@@ -11,7 +11,7 @@ export const companiesSchema = Type.Object(
   {
     uuid: Type.String(),
     name: Type.String(),
-    credit: Type.Number(),
+    credits: Type.Number(),
   },
   { $id: 'Companies', additionalProperties: false }
 );
@@ -24,7 +24,7 @@ export const companiesExternalResolver = resolve<Companies, HookContext>({});
 // Schema for creating new entries
 export const companiesDataSchema = Type.Pick(
   companiesSchema,
-  ['name', 'credit'],
+  ['name', 'credits'],
   {
     $id: 'CompaniesData',
   }
@@ -38,7 +38,7 @@ export const companiesDataResolver = resolve<Companies, HookContext>({});
 
 // Schema for updating existing entries
 export const companiesPatchSchema = Type.Partial(
-  Type.Pick(companiesSchema, ['name', 'credit']),
+  Type.Pick(companiesSchema, ['name', 'credits']),
   {
     $id: 'CompaniesPatch',
   }
