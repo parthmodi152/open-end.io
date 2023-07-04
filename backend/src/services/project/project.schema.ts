@@ -1,4 +1,4 @@
-// // For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
+// For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
 import { resolve } from '@feathersjs/schema';
 import { Type, getValidator, querySyntax } from '@feathersjs/typebox';
 import type { Static } from '@feathersjs/typebox';
@@ -13,7 +13,12 @@ export const projectSchema = Type.Object(
     name: Type.String(),
     description: Type.Optional(Type.String()),
     config: Type.Optional(Type.Object({}, { additionalProperties: true })),
-    ownerUuid: Type.String({ format: 'uuid' }),
+    companyUuid: Type.String({ format: 'uuid' }),
+    createdBy: Type.String({ format: 'uuid' }),
+    dataFileUrl: Type.String(),
+    resultFileUrl: Type.Optional(Type.String()),
+    createdAt: Type.String({ format: 'date-time' }),
+    updatedAt: Type.String({ format: 'date-time' }),
   },
   { $id: 'Project', additionalProperties: false }
 );
@@ -26,7 +31,7 @@ export const projectExternalResolver = resolve<Project, HookContext>({});
 // Schema for creating new entries
 export const projectDataSchema = Type.Pick(
   projectSchema,
-  ['name', 'description', 'config', 'ownerUuid'],
+  ['name', 'description', 'config', 'companyUuid', 'createdBy', 'dataFileUrl'],
   {
     $id: 'ProjectData',
   }
@@ -53,7 +58,8 @@ export const projectPatchResolver = resolve<Project, HookContext>({});
 export const projectQueryProperties = Type.Pick(projectSchema, [
   'uuid',
   'name',
-  'ownerUuid',
+  'companyUuid',
+  'createdBy',
 ]);
 export const projectQuerySchema = Type.Intersect(
   [

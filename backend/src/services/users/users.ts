@@ -70,7 +70,7 @@ export const user = (app: Application) => {
       create: [
         schemaHooks.validateData(userDataValidator),
         schemaHooks.resolveData(userDataResolver),
-        emailUnique,
+        emailUnique
       ],
       patch: [
         schemaHooks.validateData(userPatchValidator),

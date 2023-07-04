@@ -52,7 +52,7 @@ export const project = (app: Application) => {
   app.service(projectPath).hooks({
     around: {
       all: [
-        //authenticate('jwt'),
+        authenticate('jwt'),
         schemaHooks.resolveExternal(projectExternalResolver),
         schemaHooks.resolveResult(projectResolver),
       ],
