@@ -1,3 +1,4 @@
+import { analysis } from './analysis/analysis'
 import { payment } from './payment/payment'
 import { project } from './project/project'
 import { companies } from './companies/companies'
@@ -6,6 +7,7 @@ import { user } from './users/users'
 import type { Application } from '../declarations'
 
 export const services = (app: Application) => {
+  app.configure(analysis)
   app.configure(payment)
   app.configure(project)
   app.configure(companies)

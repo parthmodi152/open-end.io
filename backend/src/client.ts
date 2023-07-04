@@ -1,25 +1,33 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/client.html
-import { feathers } from '@feathersjs/feathers';
-import type { TransportConnection, Application } from '@feathersjs/feathers';
-import authenticationClient from '@feathersjs/authentication-client';
-import type { AuthenticationClientOptions } from '@feathersjs/authentication-client';
+import { feathers } from '@feathersjs/feathers'
+import type { TransportConnection, Application } from '@feathersjs/feathers'
+import authenticationClient from '@feathersjs/authentication-client'
+import type { AuthenticationClientOptions } from '@feathersjs/authentication-client'
 
-import { paymentClient } from './services/payment/payment.shared';
-export type { Payment, PaymentData, PaymentQuery, PaymentPatch } from './services/payment/payment.shared';
+import { analysisClient } from './services/analysis/analysis.shared'
+export type {
+  Analysis,
+  AnalysisData,
+  AnalysisQuery,
+  AnalysisPatch
+} from './services/analysis/analysis.shared'
 
-import { projectClient } from './services/project/project.shared';
-export type { Project, ProjectData, ProjectQuery, ProjectPatch } from './services/project/project.shared';
+import { paymentClient } from './services/payment/payment.shared'
+export type { Payment, PaymentData, PaymentQuery, PaymentPatch } from './services/payment/payment.shared'
 
-import { companiesClient } from './services/companies/companies.shared';
+import { projectClient } from './services/project/project.shared'
+export type { Project, ProjectData, ProjectQuery, ProjectPatch } from './services/project/project.shared'
+
+import { companiesClient } from './services/companies/companies.shared'
 export type {
   Companies,
   CompaniesData,
   CompaniesQuery,
   CompaniesPatch
-} from './services/companies/companies.shared';
+} from './services/companies/companies.shared'
 
-import { userClient } from './services/users/users.shared';
-export type { User, UserData, UserQuery, UserPatch } from './services/users/users.shared';
+import { userClient } from './services/users/users.shared'
+export type { User, UserData, UserQuery, UserPatch } from './services/users/users.shared'
 
 export interface Configuration {
   connection: TransportConnection<ServiceTypes>
@@ -41,15 +49,16 @@ export const createClient = <Configuration = any>(
   connection: TransportConnection<ServiceTypes>,
   authenticationOptions: Partial<AuthenticationClientOptions> = {}
 ) => {
-  const client: ClientApplication = feathers();
+  const client: ClientApplication = feathers()
 
-  client.configure(connection);
-  client.configure(authenticationClient(authenticationOptions));
-  client.set('connection', connection);
+  client.configure(connection)
+  client.configure(authenticationClient(authenticationOptions))
+  client.set('connection', connection)
 
-  client.configure(userClient);
-  client.configure(companiesClient);
-  client.configure(projectClient);
-  client.configure(paymentClient);
-  return client;
-};
+  client.configure(userClient)
+  client.configure(companiesClient)
+  client.configure(projectClient)
+  client.configure(paymentClient)
+  client.configure(analysisClient)
+  return client
+}
