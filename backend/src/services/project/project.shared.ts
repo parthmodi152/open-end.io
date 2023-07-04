@@ -5,7 +5,7 @@ import type { Project, ProjectData, ProjectPatch, ProjectQuery, ProjectService }
 
 export type { Project, ProjectData, ProjectPatch, ProjectQuery };
 
-export type ProjectClientService = Pick<ProjectService<Params<ProjectQuery>>, (typeof projectMethods)[number]>
+export type ProjectClientService = Pick<ProjectService, (typeof projectMethods)[number]>
 
 export const projectPath = 'project';
 

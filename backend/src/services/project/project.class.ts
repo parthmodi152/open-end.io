@@ -16,6 +16,10 @@ export interface ProjectParams extends AuthenticatedParams {
 // By default calls the standard Knex adapter service methods but can be customized with your own functionality.
 export class ProjectService extends BaseService {
 
+  constructor(options: KnexAdapterOptions & { app: Application }) {
+    super(options, options.app);
+  }
+
     async create(data: ProjectData, params?: ProjectParams): Promise<Project>
     async create(data: ProjectData[], params?: ProjectParams): Promise<Project[]>
     async create(
@@ -45,11 +49,12 @@ export class ProjectService extends BaseService {
 
 }
 
-export const getOptions = (app: Application): KnexAdapterOptions => {
+export const getOptions = (app: Application): KnexAdapterOptions & { app: Application } => {
   return {
     id: 'uuid',
     paginate: app.get('paginate'),
     Model: app.get('postgresqlClient'),
-    name: 'project'
+    name: 'project',
+    app: app
   };
 };
