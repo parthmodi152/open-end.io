@@ -10,7 +10,12 @@ import { dataValidator, queryValidator } from '../../validators'
 export const analysisSchema = Type.Object(
   {
     id: Type.Number(),
-    text: Type.String()
+    orderId: Type.String({ format: 'uuid' }),
+    projectId: Type.String({ format: 'uuid' }),
+    creditsUsed: Type.Number(),
+    startedBy: Type.String({ format: 'uuid' }),
+    startedAt: Type.String({ format: 'date-time' }),
+    status: Type.Boolean()
   },
   { $id: 'Analysis', additionalProperties: false }
 )
@@ -21,7 +26,7 @@ export const analysisResolver = resolve<Analysis, HookContext>({})
 export const analysisExternalResolver = resolve<Analysis, HookContext>({})
 
 // Schema for creating new entries
-export const analysisDataSchema = Type.Pick(analysisSchema, ['text'], {
+export const analysisDataSchema = Type.Pick(analysisSchema, ['projectId', 'creditsUsed', 'startedBy'], {
   $id: 'AnalysisData'
 })
 export type AnalysisData = Static<typeof analysisDataSchema>
@@ -37,7 +42,7 @@ export const analysisPatchValidator = getValidator(analysisPatchSchema, dataVali
 export const analysisPatchResolver = resolve<Analysis, HookContext>({})
 
 // Schema for allowed query properties
-export const analysisQueryProperties = Type.Pick(analysisSchema, ['id', 'text'])
+export const analysisQueryProperties = Type.Pick(analysisSchema, ['orderId', 'projectId', 'startedBy'])
 export const analysisQuerySchema = Type.Intersect(
   [
     querySyntax(analysisQueryProperties),
