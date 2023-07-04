@@ -10,14 +10,14 @@ import { User } from './services/users/users';
 import { ServiceSwaggerOptions } from 'feathers-swagger';
 import { projectPath } from './services/project/project.shared';
 import { ProjectService } from './services/project/project.class';
-import { S3Client } from './s3';  // Import the S3Client class
+import { AWSClient } from './aws';  // Import the AWSClient class
 
 export { NextFunction };
 
 // The types for app.get(name) and app.set(name)
 export interface Configuration extends ApplicationConfiguration {
   aws?: any;  // Add the 'aws' property
-  s3Client?: S3Client;  // Add the 's3Client' property
+  awsClient?: AWSClient;  // Add the 'awsClient' property
 }
 
 // A mapping of service names to types. Will be extended in service files.

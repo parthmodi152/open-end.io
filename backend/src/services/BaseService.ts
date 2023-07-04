@@ -2,7 +2,7 @@ import { Params } from '@feathersjs/feathers';
 import { KnexService } from '@feathersjs/knex';
 import type { KnexAdapterOptions } from '@feathersjs/knex';
 import type { Application } from '../declarations';
-import { S3Client } from '../s3';
+import { AWSClient } from '../aws';
 
 export interface AuthenticatedParams extends Params {
   user: any,
@@ -11,15 +11,15 @@ export interface AuthenticatedParams extends Params {
 
 export class BaseService<ServiceParams extends Params = AuthenticatedParams> extends KnexService {
   protected app: Application;
-  protected s3: S3Client;
+  protected aws: AWSClient;
 
   constructor(options: KnexAdapterOptions, app: Application) {
     super(options);
-    const s3Client = app.get('s3Client');
-    if (!s3Client) {
-      throw new Error('s3Client is not defined in the application');
+    const awsClient = app.get('awsClient');
+    if (!awsClient) {
+      throw new Error('awsClient is not defined in the application');
     }
-    this.s3 = s3Client;
+    this.aws = awsClient;
     this.app = app;
   }
 }

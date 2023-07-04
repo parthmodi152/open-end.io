@@ -1,5 +1,5 @@
 import { Application } from './declarations';
-import aws, { S3 } from 'aws-sdk';
+import aws, { S3, Lambda } from 'aws-sdk';
 import { Readable } from 'stream';
 import { ManagedUpload } from 'aws-sdk/clients/s3';
 
@@ -11,8 +11,9 @@ interface AwsConfig {
   enableSignedUrls: boolean
 }
 
-export class S3Client {
+export class AWSClient {
   public s3Client: aws.S3;
+  public lambdaClient: aws.Lambda;
   public urlSigner: aws.CloudFront.Signer | null = null;
   private readonly bucket: string;
 
@@ -21,11 +22,24 @@ export class S3Client {
     aws.config.update({ region });
     this.bucket = bucket;
     this.s3Client = new aws.S3({ apiVersion: 'latest' });
+    this.lambdaClient = new aws.Lambda({ apiVersion: 'latest' });
     if (enableSignedUrls) {
       this.urlSigner = new aws.CloudFront.Signer(keypairId, process.env.CLOUDFRONT_PK ? process.env.CLOUDFRONT_PK : '');
     }
   }
 
+  //   Lambda
+  public invokeLambda(functionName: string, payload: any): Promise<Lambda.Types.InvocationResponse> {
+    const params: Lambda.Types.InvocationRequest = {
+      FunctionName: functionName,
+      InvocationType: 'Event', // This makes the invocation asynchronous
+      Payload: JSON.stringify(payload),
+    };
+
+    return this.lambdaClient.invoke(params).promise();
+  }
+  
+  //   S3
   public store(what: Readable | Buffer, key: string, contentType: string, contentDisposition: string | null = null): Promise<ManagedUpload.SendData> {
     const params: S3.Types.PutObjectRequest = {
       Bucket: this.bucket,
@@ -52,5 +66,5 @@ export class S3Client {
 }
 
 export default function (app: Application): void {
-  app.set('s3Client', new S3Client(app.get('aws')));
+  app.set('awsClient', new AWSClient(app.get('aws')));
 }

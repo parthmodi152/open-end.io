@@ -42,7 +42,7 @@ export class ProjectService extends BaseService {
       const { file } = params!;
       if (file) {
         const key = `${data.companyUuid}/${data.name}/${file.originalname}`;
-        await this.s3.store(file.stream, key, file.mimetype);
+        await this.aws.store(file.stream, key, file.mimetype);
         return key
       }
 }
