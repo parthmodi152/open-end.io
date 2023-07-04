@@ -15,7 +15,7 @@ export const projectSchema = Type.Object(
     config: Type.Optional(Type.Object({}, { additionalProperties: true })),
     companyUuid: Type.String({ format: 'uuid' }),
     createdBy: Type.String({ format: 'uuid' }),
-    dataFileUrl: Type.String(),
+    dataFileUrl: Type.Optional(Type.String()),
     resultFileUrl: Type.Optional(Type.String()),
     createdAt: Type.String({ format: 'date-time' }),
     updatedAt: Type.String({ format: 'date-time' }),

@@ -5,18 +5,45 @@ import type { KnexAdapterParams, KnexAdapterOptions } from '@feathersjs/knex';
 
 import type { Application } from '../../declarations';
 import type { Project, ProjectData, ProjectPatch, ProjectQuery } from './project.schema';
+import { AuthenticatedParams, BaseService } from '../BaseService';
 
 export type { Project, ProjectData, ProjectPatch, ProjectQuery };
 
-export interface ProjectParams extends KnexAdapterParams<ProjectQuery> {}
+export interface ProjectParams extends AuthenticatedParams {
+  file?: Express.Multer.File;
+}
 
 // By default calls the standard Knex adapter service methods but can be customized with your own functionality.
-export class ProjectService<ServiceParams extends Params = ProjectParams> extends KnexService<
-  Project,
-  ProjectData,
-  ProjectParams,
-  ProjectPatch
-> {}
+export class ProjectService extends BaseService {
+
+    async create(data: ProjectData, params?: ProjectParams): Promise<Project>
+    async create(data: ProjectData[], params?: ProjectParams): Promise<Project[]>
+    async create(
+      data: ProjectData | ProjectData[],
+      params?: ProjectParams
+    ): Promise<Project | Project[]> {
+      if (Array.isArray(data)) {
+        for (let item of data) {
+          let key = await this.processFileUpload(item, params);
+          item.dataFileUrl = key;
+        }
+      } else {
+        let key = await this.processFileUpload(data, params);
+        data.dataFileUrl = key;
+      }
+      return super.create(data, params);
+    }
+
+    private async processFileUpload(data: ProjectData, params?: ProjectParams) {
+      const { file } = params!;
+      if (file) {
+        const key = `${data.companyUuid}/${data.name}/${file.originalname}`;
+        await this.s3.store(file.stream, key, file.mimetype);
+        return key
+      }
+}
+
+}
 
 export const getOptions = (app: Application): KnexAdapterOptions => {
   return {

@@ -20,6 +20,7 @@ import { getOptions, UserService } from './users.class';
 import { userMethods, userPath } from './users.shared';
 import { createSwaggerServiceOptions } from 'feathers-swagger';
 import { emailUnique } from '../../hooks/emailUnique';
+import { checkCompanyExists } from "../../hooks/check-company-exists";
 import {authenticate} from '@feathersjs/authentication';
 
 export * from './users.class';
@@ -70,12 +71,14 @@ export const user = (app: Application) => {
       create: [
         schemaHooks.validateData(userDataValidator),
         schemaHooks.resolveData(userDataResolver),
-        emailUnique
+        emailUnique,
+        checkCompanyExists
       ],
       patch: [
         schemaHooks.validateData(userPatchValidator),
         schemaHooks.resolveData(userPatchResolver),
-        emailUnique
+        emailUnique,
+        checkCompanyExists
       ],
       remove: [],
     },
