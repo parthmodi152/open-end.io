@@ -4,6 +4,7 @@ import type { FormatsPluginOptions } from '@feathersjs/schema';
 
 const formats: FormatsPluginOptions = [
   'date-time',
+  'binary',
   'time',
   'date',
   'email',

@@ -4,7 +4,11 @@
  * Configures SASS variables and Vuetify overwrites
  */
 
-// https://vuetifyjs.com/features/sass-variables/`
-// @use 'vuetify/settings' with (
-//   $color-pack: false
-// );
+ //https://vuetifyjs.com/features/sass-variables/`
+ //@use 'vuetify/settings' with (
+ //  $color-pack: false
+ //);
+.v-main {
+  padding-top: 0;
+  margin-top: -4rem;
+}

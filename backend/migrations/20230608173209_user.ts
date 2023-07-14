@@ -25,14 +25,5 @@ export async function up(knex: Knex): Promise<void> {
 }
 
 export async function down(knex: Knex): Promise<void> {
-  await knex.schema.alterTable('project', (table) => {
-    table.dropColumn('createdBy');
-  });
-  await knex.schema.alterTable('payment', (table) => {
-    table.dropColumn('userUuid');
-  });
-  await knex.schema.alterTable('analysis', (table) => {
-    table.dropColumn('startedBy');
-  });
   await knex.schema.dropTable('users');
 }

@@ -41,8 +41,8 @@ export class ProjectService extends BaseService {
     private async processFileUpload(data: ProjectData, params?: ProjectParams) {
       const { file } = params!;
       if (file) {
-        const key = `${data.companyUuid}/${data.name}/${file.originalname}`;
-        await this.aws.store(file.stream, key, file.mimetype);
+        const key = `${data.companyUuid}/${file.originalname}`;
+        await this.aws.store(key, file.buffer, file.mimetype);
         return key
       }
 }

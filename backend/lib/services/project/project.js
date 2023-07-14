@@ -13,6 +13,9 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.project = void 0;
 const schema_1 = require("@feathersjs/schema");
@@ -20,10 +23,15 @@ const project_schema_1 = require("./project.schema");
 const project_class_1 = require("./project.class");
 const project_shared_1 = require("./project.shared");
 const feathers_swagger_1 = require("feathers-swagger");
+const koa_multer_1 = __importDefault(require("koa-multer"));
+const multipartMiddleware = (0, koa_multer_1.default)({
+    limits: { fieldSize: Infinity, files: 1 }
+});
 __exportStar(require("./project.class"), exports);
 __exportStar(require("./project.schema"), exports);
 // A configure function that registers the service and its hooks via `app.configure`
 const project = (app) => {
+    // const upload = multer(); // note you can pass `multer` options here
     // Register our service on the Feathers application
     app.use(project_shared_1.projectPath, new project_class_1.ProjectService((0, project_class_1.getOptions)(app)), {
         // A list of all methods this service exposes externally
@@ -38,11 +46,56 @@ const project = (app) => {
                 projectPatchSchema: project_schema_1.projectPatchSchema,
             },
             docs: {
-                idType: "string",
-                description: "User management service",
-                securities: ["all"],
+                idType: 'string',
+                description: 'User management service',
+                securities: ['all'],
+                operations: {
+                    create: {
+                        description: 'Create new media upload',
+                        requestBody: {
+                            content: {
+                                'multipart/form-data': {
+                                    schema: project_schema_1.projectDataSchema,
+                                },
+                            },
+                        },
+                    },
+                },
             },
         }),
+        koa: {
+            before: [
+                async (ctx, next) => {
+                    if (ctx.method === 'POST') { // Apply middleware only for "create" (POST) operation
+                        await multipartMiddleware.single('uploadCsv')(ctx, async () => {
+                            // @ts-ignore
+                            ctx.feathers.file = ctx.req.file;
+                            // @ts-ignore
+                            ctx.request.body = ctx.req.body;
+                            delete ctx.request.body.uploadCsv;
+                            try {
+                                ctx.request.body.config = JSON.parse(ctx.request.body.config);
+                            }
+                            catch (error) {
+                                if (typeof ctx.request.body.config !== 'object' || ctx.request.body.config === null) {
+                                    throw error;
+                                }
+                            }
+                            if (ctx.request.body.isArchive === 'true') {
+                                ctx.request.body.isArchive = true;
+                            }
+                            else if (ctx.request.body.isArchive === 'false') {
+                                ctx.request.body.isArchive = false;
+                            }
+                            await next();
+                        });
+                    }
+                    else {
+                        await next();
+                    }
+                },
+            ],
+        }
     });
     // Initialize hooks
     app.service(project_shared_1.projectPath).hooks({

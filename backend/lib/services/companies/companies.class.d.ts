@@ -7,5 +7,7 @@ export type { Companies, CompaniesData, CompaniesPatch, CompaniesQuery };
 export interface CompaniesParams extends KnexAdapterParams<CompaniesQuery> {
 }
 export declare class CompaniesService<ServiceParams extends Params = CompaniesParams> extends KnexService<Companies, CompaniesData, CompaniesParams, CompaniesPatch> {
+    hasSufficientCredits(companyId: string, requiredCredits: number): Promise<boolean>;
+    deductCredits(companyId: string, credits: number): Promise<void>;
 }
 export declare const getOptions: (app: Application) => KnexAdapterOptions;

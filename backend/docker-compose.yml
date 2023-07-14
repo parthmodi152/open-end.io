@@ -22,6 +22,63 @@ services:
     ports:
       - "15444:5432"
 
+  postgres_test:
+    image: "postgres:13-alpine"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10M"
+        max-file: "3"
+    command: postgres -c shared_preload_libraries='pg_stat_statements' -c pg_stat_statements.track=all
+    restart: always
+    environment:
+      - POSTGRES_USER=openendio
+      - POSTGRES_PASSWORD=openendio
+      - POSTGRES_DB=openend
+    networks:
+      - soppy
+    hostname: postgres_test
+    ports:
+      - "15439:5432"
+
+
+  localstack:
+    image: "localstack/localstack:latest"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10M"
+        max-file: "3"
+    hostname: localstack
+    healthcheck:
+      test: [ "CMD-SHELL", "awslocal s3 list-buckets && awslocal lambda list-functions" ]
+      timeout: 5s
+      interval: 10s
+      retries: 5
+    volumes:
+      - "./localstack/init.sh:/etc/localstack/init/ready.d/init-aws.sh"
+      - "${TMPDIR:-/tmp/localstack}:/var/lib/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "./localstack/lambda:/var/task"
+    networks:
+      - soppy
+    restart: unless-stopped
+    ports:
+      - '4566:4566'
+      - '4571:4571'
+      - '8082:8080'
+    environment:
+      - SERVICES=s3,lambda
+      - LOCALSTACK_HOSTNAME=localstack
+      - PERSISTENCE=1
+      - LEGACY_PERSISTENCE=false
+      - AWS_ACCESS_KEY=access
+      - AWS_SECRET_ACCESS_KEY=secret
+      - AWS_DEFAULT_REGION=us-west-2
+      - LS_LOG=trace
+      - DEBUG=1
+      - LAMBDA_EXECUTOR=local
+
 volumes:
   postgres:
 

@@ -54,7 +54,7 @@
   </form-modal>
 </template>
 
-<script>
+<script lang="ts">
 import { useGeneralStore } from '@/store/modules/generalStore';
 import { mapActions, mapState } from 'pinia';
 import FormModal from '@/views/dashboard/Modal/BaseModel.vue';
@@ -75,16 +75,29 @@ export default {
     ...mapState(useGeneralStore, ['loginPopup']),
     ...mapState(useAuthStore, ['loggedIn']),
   },
-  data: () => ({
+  data(): {
     model: {
-      email: '',
-      password: ''
-    },
-    showPassword: false,
+      email: string;
+      password: string;
+    };
+    showPassword: boolean;
+  } {
+    return {
+      model: {
+        email: '',
+        password: ''
+      },
+      showPassword: false,
 
-  }),
+    }
+  },
   methods: {
+    invalidate() {
+      this.model.email = '';
+      this.model.password = '';
+    },
     close() {
+      this.invalidate();
       this.setLoginPopup();
     },
     submitLogin(){
@@ -97,6 +110,7 @@ export default {
         this.showAlert('Login Successful','success');
         this.showPassword = false;
         this.close();
+        this.$router.push('/dashboard');
       });
     },
     signup(){

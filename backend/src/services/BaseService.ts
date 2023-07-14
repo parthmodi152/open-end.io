@@ -5,8 +5,7 @@ import type { Application } from '../declarations';
 import { AWSClient } from '../aws';
 
 export interface AuthenticatedParams extends Params {
-  user: any,
-  file?: Express.Multer.File
+  user: any
 }
 
 export class BaseService<ServiceParams extends Params = AuthenticatedParams> extends KnexService {

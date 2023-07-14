@@ -57,21 +57,38 @@
     </v-form>
   </base-modal>
 </template>
-<script>
+<script lang='ts'>
 import BaseModal from '@/views/dashboard/Modal/BaseModel.vue';
 import { mapActions, mapState } from 'pinia';
 import { useCompaniesStore } from '@/store/modules/companiesStore';
 import { useGeneralStore } from '@/store/modules/generalStore';
 import { useUsersStore } from '@/store/modules/usersStore';
 
+interface UserModel {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
+
 export default {
   components: {BaseModal},
-  data() {
+  data(): {
+    validation: boolean,
+    companyName: string,
+    companyNameRules: ((value: string) => string | boolean)[],
+    userModel: UserModel,
+    nameRules: ((value: string) => string | boolean)[],
+    emailRules: ((value: string) => string | boolean)[],
+    passwordRules: ((value: string) => string | boolean)[],
+    passwordConfirmRules: ((value: string) => string | boolean)[],
+  } {
     return {
       validation: false,
       companyName: '',
       companyNameRules : [
-        value => {
+        (value: string): string | boolean => {
           if (!value) {
             return 'Company name is required';
           }
@@ -89,7 +106,7 @@ export default {
         confirmPassword: ''
       },
       nameRules: [
-        value => {
+        (value: string): string | boolean => {
           this.validation = false;
           if (!value) {
             return 'Name is required';
@@ -105,7 +122,7 @@ export default {
         }
       ],
       passwordRules: [
-        value => {
+        (value: string): string | boolean => {
           this.validation = false;
           if (!value) {
             return 'Password is required';
@@ -121,7 +138,7 @@ export default {
         }
       ],
       passwordConfirmRules: [
-        value => {
+        (value: string): string | boolean => {
           this.validation = false;
           if (!value) {
             return 'Password confirmation is required';
@@ -134,7 +151,7 @@ export default {
         }
       ],
       emailRules: [
-        value => {
+        (value: string): string | boolean => {
           this.validation = false;
           if (!value) {
             return 'Email is required';

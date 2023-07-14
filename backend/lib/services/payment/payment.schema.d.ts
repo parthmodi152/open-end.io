@@ -2,7 +2,6 @@ import type { Static } from '@feathersjs/typebox';
 import type { HookContext } from '../../declarations';
 export declare const paymentSchema: import("@sinclair/typebox").TObject<{
     uuid: import("@sinclair/typebox").TString<"uuid">;
-    description: import("@sinclair/typebox").TString<string>;
     type: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TString<string>>;
     companyUuid: import("@sinclair/typebox").TString<"uuid">;
     userUuid: import("@sinclair/typebox").TString<"uuid">;
@@ -13,7 +12,6 @@ export type Payment = Static<typeof paymentSchema>;
 export declare const paymentValidator: import("@feathersjs/schema").Validator<any, any>;
 export declare const paymentResolver: import("@feathersjs/schema").Resolver<{
     type?: string | undefined;
-    description: string;
     uuid: string;
     companyUuid: string;
     userUuid: string;
@@ -22,7 +20,6 @@ export declare const paymentResolver: import("@feathersjs/schema").Resolver<{
 }, HookContext>;
 export declare const paymentExternalResolver: import("@feathersjs/schema").Resolver<{
     type?: string | undefined;
-    description: string;
     uuid: string;
     companyUuid: string;
     userUuid: string;
@@ -31,18 +28,16 @@ export declare const paymentExternalResolver: import("@feathersjs/schema").Resol
 }, HookContext>;
 export declare const paymentDataSchema: import("@sinclair/typebox").TPick<import("@sinclair/typebox").TObject<{
     uuid: import("@sinclair/typebox").TString<"uuid">;
-    description: import("@sinclair/typebox").TString<string>;
     type: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TString<string>>;
     companyUuid: import("@sinclair/typebox").TString<"uuid">;
     userUuid: import("@sinclair/typebox").TString<"uuid">;
     amount: import("@sinclair/typebox").TNumber;
     balance: import("@sinclair/typebox").TNumber;
-}>, ["description", "type", "companyUuid", "userUuid", "amount", "balance"]>;
+}>, ["type", "companyUuid", "userUuid", "amount", "balance"]>;
 export type PaymentData = Static<typeof paymentDataSchema>;
 export declare const paymentDataValidator: import("@feathersjs/schema").Validator<any, any>;
 export declare const paymentDataResolver: import("@feathersjs/schema").Resolver<{
     type?: string | undefined;
-    description: string;
     uuid: string;
     companyUuid: string;
     userUuid: string;
@@ -51,7 +46,6 @@ export declare const paymentDataResolver: import("@feathersjs/schema").Resolver<
 }, HookContext>;
 export declare const paymentPatchSchema: import("@sinclair/typebox").TPartial<import("@sinclair/typebox").TObject<{
     uuid: import("@sinclair/typebox").TString<"uuid">;
-    description: import("@sinclair/typebox").TString<string>;
     type: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TString<string>>;
     companyUuid: import("@sinclair/typebox").TString<"uuid">;
     userUuid: import("@sinclair/typebox").TString<"uuid">;
@@ -62,7 +56,6 @@ export type PaymentPatch = Static<typeof paymentPatchSchema>;
 export declare const paymentPatchValidator: import("@feathersjs/schema").Validator<any, any>;
 export declare const paymentPatchResolver: import("@feathersjs/schema").Resolver<{
     type?: string | undefined;
-    description: string;
     uuid: string;
     companyUuid: string;
     userUuid: string;
@@ -71,7 +64,6 @@ export declare const paymentPatchResolver: import("@feathersjs/schema").Resolver
 }, HookContext>;
 export declare const paymentQueryProperties: import("@sinclair/typebox").TPick<import("@sinclair/typebox").TObject<{
     uuid: import("@sinclair/typebox").TString<"uuid">;
-    description: import("@sinclair/typebox").TString<string>;
     type: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TString<string>>;
     companyUuid: import("@sinclair/typebox").TString<"uuid">;
     userUuid: import("@sinclair/typebox").TString<"uuid">;

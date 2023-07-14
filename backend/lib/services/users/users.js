@@ -22,7 +22,7 @@ const users_class_1 = require("./users.class");
 const users_shared_1 = require("./users.shared");
 const feathers_swagger_1 = require("feathers-swagger");
 const emailUnique_1 = require("../../hooks/emailUnique");
-const authentication_1 = require("@feathersjs/authentication");
+const check_company_exists_1 = require("../../hooks/check-company-exists");
 __exportStar(require("./users.class"), exports);
 __exportStar(require("./users.schema"), exports);
 // A configure function that registers the service and its hooks via `app.configure`
@@ -50,8 +50,8 @@ const user = (app) => {
                 schema_1.hooks.resolveResult(users_schema_1.userResolver),
             ],
             find: [
-                //TODO: turn on tha auth when we are ready
-                (0, authentication_1.authenticate)('jwt')
+            //TODO: turn on tha auth when we are ready
+            //authenticate('jwt')
             ],
             get: [],
             create: [],
@@ -70,11 +70,12 @@ const user = (app) => {
                 schema_1.hooks.validateData(users_schema_1.userDataValidator),
                 schema_1.hooks.resolveData(users_schema_1.userDataResolver),
                 emailUnique_1.emailUnique,
+                check_company_exists_1.checkCompanyExists
             ],
             patch: [
                 schema_1.hooks.validateData(users_schema_1.userPatchValidator),
                 schema_1.hooks.resolveData(users_schema_1.userPatchResolver),
-                emailUnique_1.emailUnique
+                emailUnique_1.emailUnique,
             ],
             remove: [],
         },

@@ -6,5 +6,10 @@
   "host": "HOSTNAME",
   "authentication": {
     "secret": "FEATHERS_SECRET"
+  },
+  "aws" : {
+    "s3Bucket": "S3_BUCKET",
+    "cloudFrontUrl": "CLOUDFRONT_URL",
+    "endpoint": "AWS_ENDPOINT"
   }
 }

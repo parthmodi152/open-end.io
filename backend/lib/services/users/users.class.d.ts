@@ -8,6 +8,5 @@ export interface UserParams extends KnexAdapterParams<UserQuery> {
 }
 export declare class UserService<ServiceParams extends Params = UserParams> extends KnexService<User, UserData, UserParams, UserPatch> {
     constructor(options: KnexAdapterOptions);
-    create(data: any, params?: ServiceParams): Promise<any>;
 }
 export declare const getOptions: (app: Application) => KnexAdapterOptions;

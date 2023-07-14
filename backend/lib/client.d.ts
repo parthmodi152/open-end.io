@@ -1,5 +1,7 @@
 import type { TransportConnection, Application } from '@feathersjs/feathers';
 import type { AuthenticationClientOptions } from '@feathersjs/authentication-client';
+import './services/analysis/analysis.shared';
+export type { Analysis, AnalysisData, AnalysisQuery, AnalysisPatch } from './services/analysis/analysis.shared';
 import './services/payment/payment.shared';
 export type { Payment, PaymentData, PaymentQuery, PaymentPatch } from './services/payment/payment.shared';
 import './services/project/project.shared';

@@ -52,7 +52,7 @@ export const user = (app: Application) => {
       ],
       find: [
         //TODO: turn on tha auth when we are ready
-        authenticate('jwt')
+        //authenticate('jwt')
 
       ],
       get: [],
@@ -78,7 +78,6 @@ export const user = (app: Application) => {
         schemaHooks.validateData(userPatchValidator),
         schemaHooks.resolveData(userPatchResolver),
         emailUnique,
-        checkCompanyExists
       ],
       remove: [],
     },

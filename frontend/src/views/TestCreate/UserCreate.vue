@@ -31,18 +31,21 @@
   </main>
 </template>
 
-<script>
+<script lang='ts'>
 import { mapActions, mapState } from 'pinia';
 import { useUsersStore } from '@/store/modules/usersStore';
 
+
 export default {
-  data: () => ({
-    email: '',
-    password: '',
-    company: '',
-    firstName: '',
-    lastName: '',
-  }),
+  data() {
+    return {
+      email: '',
+      password: '',
+      company: '',
+      firstName: '',
+      lastName: '',
+    };
+  },
   methods: {
     createUser() {
       if (this.email.trim() !== '' || this.password.trim() !== '' || this.company.trim() !== '' || this.firstName.trim() !== '' || this.lastName.trim() !== '') {

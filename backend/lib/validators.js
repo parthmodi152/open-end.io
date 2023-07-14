@@ -5,6 +5,7 @@ exports.queryValidator = exports.dataValidator = void 0;
 const schema_1 = require("@feathersjs/schema");
 const formats = [
     'date-time',
+    'binary',
     'time',
     'date',
     'email',

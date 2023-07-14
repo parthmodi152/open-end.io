@@ -1,67 +1,91 @@
 import { Application } from './declarations';
-import aws, { S3, Lambda } from 'aws-sdk';
+import {
+  DeleteObjectCommand,
+  DeleteObjectCommandInput,
+  DeleteObjectCommandOutput,
+  PutObjectCommand,
+  PutObjectCommandInput,
+  PutObjectCommandOutput,
+  S3Client,
+  S3ClientConfig,
+} from '@aws-sdk/client-s3';
 import { Readable } from 'stream';
-import { ManagedUpload } from 'aws-sdk/clients/s3';
+import {LambdaClient, LambdaClientConfig, InvokeCommand, InvokeCommandOutput } from '@aws-sdk/client-lambda';
 
-interface AwsConfig {
-  region: string,
-  bucket: string,
-  cloudFrontUrl: string,
-  keypairId: string,
-  enableSignedUrls: boolean
+export interface AwsConfig {
+  region?: string;
+  s3Bucket: string;
+  endpoint?: string;
+  cloudFrontUrl: string;
 }
-
 export class AWSClient {
-  public s3Client: aws.S3;
-  public lambdaClient: aws.Lambda;
-  public urlSigner: aws.CloudFront.Signer | null = null;
-  private readonly bucket: string;
+  private s3Bucket: string;
+  private cloudFrontUrl: string;
+
+  private S3ClientConfig: S3ClientConfig = {
+    apiVersion: 'latest',
+  };
+
+  private LambdaClientConfig: LambdaClientConfig = {
+    apiVersion: 'latest',
+  };
+
+  private s3Client: S3Client;
+  private lambdaClient: LambdaClient;
 
   constructor(awsConfig: AwsConfig) {
-    const { region, bucket, keypairId, enableSignedUrls } = awsConfig;
-    aws.config.update({ region });
-    this.bucket = bucket;
-    this.s3Client = new aws.S3({ apiVersion: 'latest' });
-    this.lambdaClient = new aws.Lambda({ apiVersion: 'latest' });
-    if (enableSignedUrls) {
-      this.urlSigner = new aws.CloudFront.Signer(keypairId, process.env.CLOUDFRONT_PK ? process.env.CLOUDFRONT_PK : '');
+    const { region, s3Bucket, endpoint, cloudFrontUrl } = awsConfig;
+    if (region) {
+      this.S3ClientConfig.region = region;
+      this.LambdaClientConfig.region = region;
     }
+    if (endpoint) {
+      this.S3ClientConfig.endpoint = endpoint;
+      this.S3ClientConfig.forcePathStyle = true;
+    }
+
+    this.s3Bucket = s3Bucket;
+    this.cloudFrontUrl = cloudFrontUrl;
+    this.s3Client = new S3Client(this.S3ClientConfig);
+    this.lambdaClient = new LambdaClient(this.LambdaClientConfig);
   }
 
   //   Lambda
-  public invokeLambda(functionName: string, payload: any): Promise<Lambda.Types.InvocationResponse> {
-    const params: Lambda.Types.InvocationRequest = {
+  public async invokeLambda(functionName: string, payload: any): Promise<InvokeCommandOutput> {
+    const command = new InvokeCommand({
       FunctionName: functionName,
-      InvocationType: 'Event', // This makes the invocation asynchronous
       Payload: JSON.stringify(payload),
-    };
-
-    return this.lambdaClient.invoke(params).promise();
-  }
-  
-  //   S3
-  public store(what: Readable | Buffer, key: string, contentType: string, contentDisposition: string | null = null): Promise<ManagedUpload.SendData> {
-    const params: S3.Types.PutObjectRequest = {
-      Bucket: this.bucket,
-      Body: what,
-      Key: key,
-      ContentType: contentType
-    };
-    if (contentDisposition) {
-      params.ContentDisposition = contentDisposition;
-    }
-    return this.s3Client.upload(params).promise();
-  }
-
-  public signUrl(key: string, expirationMinutes = 60): Promise<string> {
-    return new Promise((resolve, reject) => {
-      if (this.urlSigner) {
-        const url = `https://${this.bucket}.s3.${aws.config.region}.amazonaws.com/${key}`;
-        resolve(this.urlSigner.getSignedUrl({ url, expires: Math.floor((new Date()).getTime() / 1000) + (60 * expirationMinutes) }));
-      } else {
-        reject('URL signing is not enabled');
-      }
     });
+
+    return this.lambdaClient.send(command);
+  }
+
+  public async store(
+    key: string,
+    body: Readable | ReadableStream<any> | Blob | Buffer | Uint8Array | undefined,
+    contentType = 'application/octet-stream'
+  ): Promise<PutObjectCommandOutput> {
+    const uploadParams: PutObjectCommandInput = {
+      Bucket: this.s3Bucket,
+      Key: key,
+      ContentType: contentType,
+      Body: body,
+    };
+    const command: PutObjectCommand = new PutObjectCommand(uploadParams);
+    return this.s3Client.send(command);
+  }
+
+  public delete(key: string): Promise<DeleteObjectCommandOutput> {
+    const deleteParams: DeleteObjectCommandInput = {
+      Bucket: this.s3Bucket,
+      Key: key,
+    };
+    const command: DeleteObjectCommand = new DeleteObjectCommand(deleteParams);
+    return this.s3Client.send(command);
+  }
+
+  public getUrl(key: string): string {
+    return `${this.cloudFrontUrl}/${key}`;
   }
 }
 

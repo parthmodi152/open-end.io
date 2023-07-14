@@ -7,21 +7,6 @@ class UserService extends knex_1.KnexService {
     constructor(options) {
         super(options);
     }
-    async create(data, params) {
-        // Additional actions on user creation
-        const userData = await super.create(data, params);
-        if (userData && userData.companyUuid) {
-            const company = await this.Model('companies')
-                .where({ uuid: userData.companyUuid })
-                .first();
-            if (company) {
-                await this.Model('companies').where({ uuid: company.uuid }).update({
-                    credit: parseInt(company.credit.toString()),
-                });
-            }
-        }
-        return userData;
-    }
 }
 exports.UserService = UserService;
 const getOptions = (app) => {

@@ -19,22 +19,22 @@ export class UserService<
     super(options);
   }
 
-  async create(data: any, params?: ServiceParams): Promise<any> {
-    // Additional actions on user creation
-    const userData = await super.create(data, params);
+  // async create(data: any, params?: ServiceParams): Promise<any> {
+  //   // Additional actions on user creation
+  //   const userData = await super.create(data, params);
 
-    if (userData && userData.companyUuid) {
-      const company = await this.Model<Companies>('companies')
-        .where({ uuid: userData.companyUuid })
-        .first();
-      if (company) {
-        await this.Model<Companies>('companies').where({ uuid: company.uuid }).update({
-          credits: parseInt(company.credits.toString()),
-        });
-      }
-    }
-    return userData;
-  }
+  //   if (userData && userData.companyUuid) {
+  //     const company = await this.Model<Companies>('companies')
+  //       .where({ uuid: userData.companyUuid })
+  //       .first();
+  //     if (company) {
+  //       await this.Model<Companies>('companies').where({ uuid: company.uuid }).update({
+  //         credits: parseInt(company.credits.toString()),
+  //       });
+  //     }
+  //   }
+  //   return userData;
+  // }
 }
 
 export const getOptions = (app: Application): KnexAdapterOptions => {

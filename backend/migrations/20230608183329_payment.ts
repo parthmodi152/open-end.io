@@ -1,5 +1,5 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/knexfile.html
-import type { Knex } from 'knex';
+import type { Knex } from "knex";
 
 export async function up(knex: Knex): Promise<void> {
   await knex.schema.createTable('payment', (table) => {
@@ -14,7 +14,7 @@ export async function up(knex: Knex): Promise<void> {
       .references('uuid')
       .inTable('companies')
       .notNullable();
-    table.uuid('userUuid').references('uuid').inTable('users');
+    table.uuid('userUuid').references('uuid').inTable('users').notNullable();
     table.decimal('amount', 10, 2).notNullable();
     table.decimal('balance', 10, 2).nullable();
   });

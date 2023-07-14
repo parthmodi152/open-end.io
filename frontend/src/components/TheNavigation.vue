@@ -10,9 +10,16 @@
         </v-list-item>
         <v-divider></v-divider>
         <v-sheet >
-          <v-list-item v-if="loggedIn" prepend-icon="mdi-home-city" title="Home" value="home" to="/"></v-list-item>
-          <v-list-item v-if="loggedIn" prepend-icon="mdi-folder" title="Projects" ></v-list-item>
-          <v-list-item v-if="loggedIn" prepend-icon="mdi-wrench" title="Settings"></v-list-item>
+          <div v-if="loggedIn">
+            <v-list-item
+              v-for="item in navItems"
+              :key="item.title"
+              :prepend-icon="item.icon"
+              :title="item.title"
+              :value="item.title"
+              :to="item.to"
+            ></v-list-item>
+          </div>
           <v-list-item prepend-icon="mdi-account" :title="logStatus" @click="setPopup"></v-list-item>
         </v-sheet>
       </v-list>
@@ -21,7 +28,7 @@
       <v-app-bar-title class="text-left">OPENENDS.IO</v-app-bar-title>
       <v-spacer></v-spacer>
       <v-btn class="text-right" v-if="!loggedIn" @click="setPopup">Login</v-btn>
-      <v-btn class="text-right navButton" v-if="loggedIn">Create Project</v-btn>
+      <v-btn class="text-right navButton" v-if="loggedIn" to="/dashboard/projects/create-project">Create Project</v-btn>
       <v-btn class="text-right" icon="mdi-dots-vertical" size="x-small" v-if="loggedIn" >
       </v-btn>
     </v-app-bar>
@@ -29,10 +36,12 @@
 
 </template>
 
-<script>
-import { useGeneralStore } from '@/store/modules/generalStore';
+<script lang="ts">
+import { useGeneralStore } from '../store/modules/generalStore';
 import { mapActions, mapState } from 'pinia';
 import {useAuthStore} from '@/store/modules/authStore';
+import {apiClient, socketClient} from '@/api';
+
 
 export default {
   computed: {
@@ -42,15 +51,23 @@ export default {
     ...mapState(useGeneralStore, ['loginPopup', 'accountCreation']),
     ...mapState(useAuthStore, ['loggedIn']),
   },
-  data: () => ({
-    drawer: true,
-    rail: true,
-  }),
+  data() {
+    return {
+      drawer: true,
+      rail: true,
+      navItems: [
+        {title: 'Home', icon: 'mdi-home-city', to: '/dashboard/home'},
+        {title: 'Projects', icon: 'mdi-folder', to: '/dashboard/projects'},
+        {title: 'Settings', icon: 'mdi-wrench', to: '/dashboard/settings'},
+      ],
+    };
+  },
   methods: {
     setPopup() {
       if (this.loggedIn) {
         this.logout();
         this.showAlert('Logout successfully', 'success');
+        this.$router.push('/dashboard/home');
 
         return;
       }

@@ -9,7 +9,7 @@ export async function up(knex: Knex): Promise<void> {
       .notNullable()
       .defaultTo(knex.raw('uuid_generate_v4()'));
     table.string('name').notNullable().checkLength('>', 0).unique();
-    table.decimal('credits', 10, 2).nullable().defaultTo(0);
+    table.decimal('credit', 10, 2).nullable().defaultTo(0);
   });
   await knex.schema.alterTable('users', (table) => {
     table.uuid('companyUuid').references('uuid').inTable('companies');
@@ -18,12 +18,6 @@ export async function up(knex: Knex): Promise<void> {
 
 export async function down(knex: Knex): Promise<void> {
   await knex.schema.alterTable('users', (table) => {
-    table.dropColumn('companyUuid');
-  });
-  await knex.schema.alterTable('project', (table) => {
-    table.dropColumn('companyUuid');
-  });
-  await knex.schema.alterTable('payment', (table) => {
     table.dropColumn('companyUuid');
   });
   await knex.schema.dropTable('companies');

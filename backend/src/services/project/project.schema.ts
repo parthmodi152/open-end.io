@@ -17,7 +17,8 @@ export const projectSchema = Type.Object(
     createdBy: Type.String({ format: 'uuid' }),
     dataFileUrl: Type.Optional(Type.String()),
     resultFileUrl: Type.Optional(Type.String()),
-    createdAt: Type.String({ format: 'date-time' })
+    createdAt: Type.String({ format: 'date-time' }),
+    isArchive: Type.Boolean(),
   },
   { $id: 'Project', additionalProperties: false }
 );
@@ -28,13 +29,20 @@ export const projectResolver = resolve<Project, HookContext>({});
 export const projectExternalResolver = resolve<Project, HookContext>({});
 
 // Schema for creating new entries
-export const projectDataSchema = Type.Pick(
-  projectSchema,
-  ['name', 'description', 'config', 'companyUuid', 'createdBy', 'dataFileUrl'],
+export const projectDataSchema = Type.Object(
   {
-    $id: 'ProjectData',
-  }
+    name: Type.String(),
+    description: Type.Optional(Type.String()),
+    config: Type.Optional(Type.Object({}, { additionalProperties: true })),
+    companyUuid: Type.String({ format: 'uuid' }),
+    createdBy: Type.String({ format: 'uuid' }),
+    dataFileUrl: Type.Optional(Type.String()),
+    uploadCsv: Type.Optional(Type.String({ format: 'binary'})),
+    isArchive: Type.Optional(Type.Boolean())
+  },
+  { $id: 'ProjectData', additionalProperties: false }
 );
+
 export type ProjectData = Static<typeof projectDataSchema>;
 export const projectDataValidator = getValidator(
   projectDataSchema,

@@ -16,12 +16,11 @@ export async function up(knex: Knex): Promise<void> {
       .uuid('companyUuid')
       .references('uuid')
       .inTable('companies')
-      .notNullable();
+      .onDelete('CASCADE'); // Add this line to enable cascading delete
     table
       .uuid('createdBy')
       .references('uuid')
-      .inTable('users')
-      .notNullable();
+      .inTable('users');
     table.string('dataFileUrl').nullable();
     table.string('resultFileUrl').nullable();
     table.timestamp('createdAt').defaultTo(knex.fn.now());
@@ -29,8 +28,5 @@ export async function up(knex: Knex): Promise<void> {
 }
 
 export async function down(knex: Knex): Promise<void> {
-  await knex.schema.alterTable('analysis', (table) => {
-    table.dropColumn('projectId');
-  });
   await knex.schema.dropTable('project');
 }

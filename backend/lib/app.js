@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.app = void 0;
 // For more information about this file see https://dove.feathersjs.com/guides/cli/application.html
 const feathers_1 = require("@feathersjs/feathers");
+const aws_1 = __importDefault(require("./aws"));
 const configuration_1 = __importDefault(require("@feathersjs/configuration"));
 const koa_1 = require("@feathersjs/koa");
 const socketio_1 = __importDefault(require("@feathersjs/socketio"));
@@ -68,6 +69,7 @@ app.configure((0, socketio_1.default)({
 app.configure(channels_1.channels);
 app.configure(postgresql_1.postgresql);
 app.configure(authentication_1.authentication);
+app.configure(aws_1.default);
 app.configure(index_1.services);
 // Register hooks that run on all service methods
 app.hooks({

@@ -7,6 +7,7 @@ exports.createClient = void 0;
 // For more information about this file see https://dove.feathersjs.com/guides/cli/client.html
 const feathers_1 = require("@feathersjs/feathers");
 const authentication_client_1 = __importDefault(require("@feathersjs/authentication-client"));
+const analysis_shared_1 = require("./services/analysis/analysis.shared");
 const payment_shared_1 = require("./services/payment/payment.shared");
 const project_shared_1 = require("./services/project/project.shared");
 const companies_shared_1 = require("./services/companies/companies.shared");
@@ -28,6 +29,7 @@ const createClient = (connection, authenticationOptions = {}) => {
     client.configure(companies_shared_1.companiesClient);
     client.configure(project_shared_1.projectClient);
     client.configure(payment_shared_1.paymentClient);
+    client.configure(analysis_shared_1.analysisClient);
     return client;
 };
 exports.createClient = createClient;

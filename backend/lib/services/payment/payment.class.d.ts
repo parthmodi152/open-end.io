@@ -1,11 +1,17 @@
-import type { Params } from '@feathersjs/feathers';
-import { KnexService } from '@feathersjs/knex';
-import type { KnexAdapterParams, KnexAdapterOptions } from '@feathersjs/knex';
+import type { KnexAdapterOptions } from '@feathersjs/knex';
 import type { Application } from '../../declarations';
 import type { Payment, PaymentData, PaymentPatch, PaymentQuery } from './payment.schema';
+import { AuthenticatedParams, BaseService } from '../BaseService';
 export type { Payment, PaymentData, PaymentPatch, PaymentQuery };
-export interface PaymentParams extends KnexAdapterParams<PaymentQuery> {
+export interface PaymentParams extends AuthenticatedParams {
 }
-export declare class PaymentService<ServiceParams extends Params = PaymentParams> extends KnexService<Payment, PaymentData, PaymentParams, PaymentPatch> {
+export declare class PaymentService extends BaseService {
+    constructor(options: KnexAdapterOptions & {
+        app: Application;
+    });
+    create(data: PaymentData, params?: PaymentParams): Promise<Payment>;
+    create(data: PaymentData[], params?: PaymentParams): Promise<Payment[]>;
 }
-export declare const getOptions: (app: Application) => KnexAdapterOptions;
+export declare const getOptions: (app: Application) => KnexAdapterOptions & {
+    app: Application;
+};

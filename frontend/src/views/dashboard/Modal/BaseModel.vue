@@ -14,7 +14,7 @@
   </v-row>
 </template>
 
-<script>
+<script lang="ts">
 import {useGeneralStore} from '@/store/modules/generalStore';
 import { mapActions, mapState } from 'pinia';
 

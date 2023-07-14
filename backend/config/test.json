@@ -1,3 +1,7 @@
 {
-  "port": 8998
+  "port": 8998,
+  "postgresql": {
+    "client": "pg",
+    "connection": "postgres://openendio:openendio@localhost:15439/openend"
+  }
 }

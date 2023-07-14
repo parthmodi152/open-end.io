@@ -8,7 +8,6 @@ const validators_1 = require("../../validators");
 // Main data model schema
 exports.paymentSchema = typebox_1.Type.Object({
     uuid: typebox_1.Type.String({ format: 'uuid' }),
-    description: typebox_1.Type.String(),
     type: typebox_1.Type.Optional(typebox_1.Type.String()),
     companyUuid: typebox_1.Type.String({ format: 'uuid' }),
     userUuid: typebox_1.Type.String({ format: 'uuid' }),
@@ -19,7 +18,7 @@ exports.paymentValidator = (0, typebox_1.getValidator)(exports.paymentSchema, va
 exports.paymentResolver = (0, schema_1.resolve)({});
 exports.paymentExternalResolver = (0, schema_1.resolve)({});
 // Schema for creating new entries
-exports.paymentDataSchema = typebox_1.Type.Pick(exports.paymentSchema, ['description', 'type', 'companyUuid', 'userUuid', 'amount', 'balance'], {
+exports.paymentDataSchema = typebox_1.Type.Pick(exports.paymentSchema, ['type', 'companyUuid', 'userUuid', 'amount', 'balance'], {
     $id: 'PaymentData'
 });
 exports.paymentDataValidator = (0, typebox_1.getValidator)(exports.paymentDataSchema, validators_1.dataValidator);

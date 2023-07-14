@@ -19,12 +19,12 @@ export class CompaniesService<ServiceParams extends Params = CompaniesParams> ex
 > {
   async hasSufficientCredits(companyId: string, requiredCredits: number): Promise<boolean> {
     const company = await this.get(companyId);
-    return company.credits >= requiredCredits;
+    return company.credit >= requiredCredits;
   }
 
   async deductCredits(companyId: string, credits: number): Promise<void> {
     const company = await this.get(companyId);
-    company.credits -= credits;
+    company.credit -= credits;
     await this.update(companyId, company);
   }
 }

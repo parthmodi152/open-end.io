@@ -10,6 +10,12 @@
     "default": 10,
     "max": 50
   },
+  "aws": {
+    "region": "us-west-2",
+    "s3Bucket": "uploads",
+    "endpoint": "http://localhost:4566",
+    "cloudFrontUrl": "http://localhost:4566/uploads"
+  },
   "postgresql": {
     "client": "pg",
     "connection": "postgres://openendio:openendio@localhost:15444/openend"
@@ -34,12 +40,5 @@
       "usernameField": "email",
       "passwordField": "password"
     }
-  },
-  "aws": {
-    "region": "your-aws-region",
-    "bucket": "your-s3-bucket-name",
-    "cloudFrontUrl": "your-cloudfront-url",
-    "keypairId": "your-cloudfront-keypair-id",
-    "enableSignedUrls": true
   }
 }

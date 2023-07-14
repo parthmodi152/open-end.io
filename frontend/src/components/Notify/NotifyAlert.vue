@@ -15,7 +15,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import {useGeneralStore} from '@/store/modules/generalStore';
 import {mapState} from 'pinia';
 export default {
